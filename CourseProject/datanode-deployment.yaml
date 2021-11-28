@@ -1,0 +1,210 @@
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "datanode-config-vjxb"
+  namespace: "default"
+  labels:
+    app: "datanode"
+data:
+  CORE_CONF_fs_defaultFS: "hdfs://namenode:9000"
+  CORE_CONF_hadoop_http_staticuser_user: "root"
+  CORE_CONF_hadoop_proxyuser_hue_hosts: "*"
+  CORE_CONF_hadoop_proxyuser_hue_groups: "*"
+  CORE_CONF_io_compression_codecs: "org.apache.hadoop.io.compress.SnappyCodec"
+  HDFS_CONF_dfs_webhdfs_enabled: "true"
+  HDFS_CONF_dfs_permissions_enabled: "false"
+  HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check: "false"
+  SERVICE_PRECONDITION: "namenode:9870"
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "datanode"
+  namespace: "default"
+  labels:
+    app: "datanode"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "datanode"
+  template:
+    metadata:
+      labels:
+        app: "datanode"
+    spec:
+      containers:
+      - name: "bde2020-hadoop-datanode"
+        image: "gcr.io/finalproject1660-333401/bde2020/hadoop-datanode"
+        env:
+        - name: "CORE_CONF_fs_defaultFS"
+          valueFrom:
+            configMapKeyRef:
+              key: "CORE_CONF_fs_defaultFS"
+              name: "datanode-config-vjxb"
+        - name: "CORE_CONF_hadoop_http_staticuser_user"
+          valueFrom:
+            configMapKeyRef:
+              key: "CORE_CONF_hadoop_http_staticuser_user"
+              name: "datanode-config-vjxb"
+        - name: "CORE_CONF_hadoop_proxyuser_hue_hosts"
+          valueFrom:
+            configMapKeyRef:
+              key: "CORE_CONF_hadoop_proxyuser_hue_hosts"
+              name: "datanode-config-vjxb"
+        - name: "CORE_CONF_hadoop_proxyuser_hue_groups"
+          valueFrom:
+            configMapKeyRef:
+              key: "CORE_CONF_hadoop_proxyuser_hue_groups"
+              name: "datanode-config-vjxb"
+        - name: "CORE_CONF_io_compression_codecs"
+          valueFrom:
+            configMapKeyRef:
+              key: "CORE_CONF_io_compression_codecs"
+              name: "datanode-config-vjxb"
+        - name: "HDFS_CONF_dfs_webhdfs_enabled"
+          valueFrom:
+            configMapKeyRef:
+              key: "HDFS_CONF_dfs_webhdfs_enabled"
+              name: "datanode-config-vjxb"
+        - name: "HDFS_CONF_dfs_permissions_enabled"
+          valueFrom:
+            configMapKeyRef:
+              key: "HDFS_CONF_dfs_permissions_enabled"
+              name: "datanode-config-vjxb"
+        - name: "HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check"
+          valueFrom:
+            configMapKeyRef:
+              key: "HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check"
+              name: "datanode-config-vjxb"
+        - name: "SERVICE_PRECONDITION"
+          valueFrom:
+            configMapKeyRef:
+              key: "SERVICE_PRECONDITION"
+              name: "datanode-config-vjxb"
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "datanode-hpa-mgfa"
+  namespace: "default"
+  labels:
+    app: "datanode"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "datanode"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      targetAverageUtilization: 80
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "datanode-config-vjxb"
+  namespace: "default"
+  labels:
+    app: "datanode"
+data:
+  CORE_CONF_fs_defaultFS: "hdfs://namenode:9000"
+  CORE_CONF_hadoop_http_staticuser_user: "root"
+  CORE_CONF_hadoop_proxyuser_hue_hosts: "*"
+  CORE_CONF_hadoop_proxyuser_hue_groups: "*"
+  CORE_CONF_io_compression_codecs: "org.apache.hadoop.io.compress.SnappyCodec"
+  HDFS_CONF_dfs_webhdfs_enabled: "true"
+  HDFS_CONF_dfs_permissions_enabled: "false"
+  HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check: "false"
+  SERVICE_PRECONDITION: "namenode:9870"
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "datanode"
+  namespace: "default"
+  labels:
+    app: "datanode"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "datanode"
+  template:
+    metadata:
+      labels:
+        app: "datanode"
+    spec:
+      containers:
+      - name: "bde2020-hadoop-datanode"
+        image: "gcr.io/finalproject1660-333401/bde2020/hadoop-datanode"
+        env:
+        - name: "CORE_CONF_fs_defaultFS"
+          valueFrom:
+            configMapKeyRef:
+              key: "CORE_CONF_fs_defaultFS"
+              name: "datanode-config-vjxb"
+        - name: "CORE_CONF_hadoop_http_staticuser_user"
+          valueFrom:
+            configMapKeyRef:
+              key: "CORE_CONF_hadoop_http_staticuser_user"
+              name: "datanode-config-vjxb"
+        - name: "CORE_CONF_hadoop_proxyuser_hue_hosts"
+          valueFrom:
+            configMapKeyRef:
+              key: "CORE_CONF_hadoop_proxyuser_hue_hosts"
+              name: "datanode-config-vjxb"
+        - name: "CORE_CONF_hadoop_proxyuser_hue_groups"
+          valueFrom:
+            configMapKeyRef:
+              key: "CORE_CONF_hadoop_proxyuser_hue_groups"
+              name: "datanode-config-vjxb"
+        - name: "CORE_CONF_io_compression_codecs"
+          valueFrom:
+            configMapKeyRef:
+              key: "CORE_CONF_io_compression_codecs"
+              name: "datanode-config-vjxb"
+        - name: "HDFS_CONF_dfs_webhdfs_enabled"
+          valueFrom:
+            configMapKeyRef:
+              key: "HDFS_CONF_dfs_webhdfs_enabled"
+              name: "datanode-config-vjxb"
+        - name: "HDFS_CONF_dfs_permissions_enabled"
+          valueFrom:
+            configMapKeyRef:
+              key: "HDFS_CONF_dfs_permissions_enabled"
+              name: "datanode-config-vjxb"
+        - name: "HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check"
+          valueFrom:
+            configMapKeyRef:
+              key: "HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check"
+              name: "datanode-config-vjxb"
+        - name: "SERVICE_PRECONDITION"
+          valueFrom:
+            configMapKeyRef:
+              key: "SERVICE_PRECONDITION"
+              name: "datanode-config-vjxb"
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "datanode-hpa-mgfa"
+  namespace: "default"
+  labels:
+    app: "datanode"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "datanode"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      targetAverageUtilization: 80

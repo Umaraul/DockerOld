@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: driver
+  labels:
+    app: driver
+spec:
+  selector:
+    matchLabels:
+      app: driver
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: driver
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+        - name: nginx-driver
+          image: 'mzw14/bg-driver:3'
+          ports:
+            - containerPort: 80
+              protocol: TCP

@@ -1,0 +1,8 @@
+service:
+    type: LoadBalancer
+    externalPort: 9001
+    loadBalancerIP: 34.139.141.156
+persistance:
+    enabled: false
+account:
+    adminPassword: "admin"

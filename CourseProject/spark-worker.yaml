@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-worker
+  labels:
+    app: spark-worker
+spec:
+  selector:
+    matchLabels:
+      octopusexport: OctopusExport
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: spark-worker
+        octopusexport: OctopusExport
+    spec:
+      containers:
+        - name: spark-worker
+          image: 'docker.io/bitnami/spark:3'
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SPARK_SSL_ENABLED
+              value: 'no'
+            - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
+              value: 'no'
+            - name: SPARK_RPC_ENCRYPTION_ENABLED
+              value: 'no'
+            - name: SPARK_RPC_AUTHENTICATION_ENABLED
+              value: 'no'
+            - name: SPARK_WORKER_CORES
+              value: '1'
+            - name: SPARK_WORKER_MEMORY
+              value: 1G
+            - name: SPARK_MASTER_URL
+              value: 'spark://spark:7077'
+            - name: SPARK_MODE
+              value: worker

@@ -1,0 +1,8 @@
+
+proxy:
+  service:
+    loadBalancerIP: 34.73.91.84
+singleuser:
+  image:
+    name: jupyter/minimal-notebook
+    tag: latest
